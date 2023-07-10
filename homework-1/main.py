@@ -6,7 +6,8 @@ conn = psycopg2.connect(
     host="localhost",
     database="north",
     user="arseniitelesh",
-    password="1408")
+    password="1408",
+)
 
 cur = conn.cursor()
 

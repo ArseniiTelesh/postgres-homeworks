@@ -21,7 +21,7 @@ CREATE TABLE orders
 (
 	order_id int PRIMARY KEY,
 	customer_id varchar(10) REFERENCES customers (customer_id) NOT NULL,
-	employee_id smallint NOT NULL,
+	employee_id smallint REFERENCES employees (employee_id) NOT NULL,
 	order_date date NOT NULL,
 	ship_city varchar(100) NOT NULL
 );
