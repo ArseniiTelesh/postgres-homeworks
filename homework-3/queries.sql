@@ -2,21 +2,28 @@
 -- 1. Название компании заказчика (company_name из табл. customers) и ФИО сотрудника, работающего над заказом этой компании (см таблицу employees),
 -- когда и заказчик и сотрудник зарегистрированы в городе London, а доставку заказа ведет компания United Package (company_name в табл shippers)
 
-SELECT company_name, CONCAT(employees.first_name,' ', employees.last_name) as employee
-FROM customers
-INNER JOIN employees USING (city)
-WHERE customers.city = 'London' and employees.city = 'London' and customers.company_name = 'United Package'
+SELECT c.company_name AS customer, CONCAT(e.first_name, ' ', e.last_name) AS employee
+FROM orders as o
+JOIN customers as c USING(customer_id)
+JOIN employees as e USING(employee_id)
+JOIN shippers as s ON o.ship_via = s.shipper_id
+WHERE c.city = 'London' AND e.city = 'London' AND s.company_name = 'United Package';
 
--- ИЛИ
-
-SELECT company_name, CONCAT(employees.first_name,' ', employees.last_name) as employee
-FROM customers
-INNER JOIN employees USING (city)
-INNER JOIN shippers USING (company_name)
-WHERE customers.city = 'London' and employees.city = 'London' and customers.company_name = shippers.company_name
-
--- ОБА НЕ ДАЮТ ОЖИДАЕМОГО ОТВЕТА, ТАК КАК В КОЛОНКЕ company_name НЕТ "United Package", А В ТАБЛИЦЕ customers НЕТ НИ ОДНОЙ СВЯЗУЮЩЕЙ КОЛОНКИ С ТАБЛИЦЕЙ shippers,
--- МОЖЕТ БЫТЬ ОШИБКА В ЗАДАНИИ, УТОЧНИТЕ ПОЖАЛУЙСТА? Я ПРОСМОТРЕЛ ВСЕ ТАБЛИЦЫ И НЕ СМОГ НАЙТИ СВЯЗЕЙ С 'United Package'
+--SELECT company_name, CONCAT(employees.first_name,' ', employees.last_name) as employee
+--FROM customers
+--INNER JOIN employees USING (city)
+--WHERE customers.city = 'London' and employees.city = 'London' and customers.company_name = 'United Package'
+--
+---- ИЛИ
+--
+--SELECT company_name, CONCAT(employees.first_name,' ', employees.last_name) as employee
+--FROM customers
+--INNER JOIN employees USING (city)
+--INNER JOIN shippers USING (company_name)
+--WHERE customers.city = 'London' and employees.city = 'London' and customers.company_name = shippers.company_name
+--
+---- ОБА НЕ ДАЮТ ОЖИДАЕМОГО ОТВЕТА, ТАК КАК В КОЛОНКЕ company_name НЕТ "United Package", А В ТАБЛИЦЕ customers НЕТ НИ ОДНОЙ СВЯЗУЮЩЕЙ КОЛОНКИ С ТАБЛИЦЕЙ shippers,
+---- МОЖЕТ БЫТЬ ОШИБКА В ЗАДАНИИ, УТОЧНИТЕ ПОЖАЛУЙСТА? Я ПРОСМОТРЕЛ ВСЕ ТАБЛИЦЫ И НЕ СМОГ НАЙТИ СВЯЗЕЙ С 'United Package'
 
 -- 2. Наименование продукта, количество товара (product_name и units_in_stock в табл products),
 -- имя поставщика и его телефон (contact_name и phone в табл suppliers) для таких продуктов,
